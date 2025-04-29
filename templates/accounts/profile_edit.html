@@ -1,0 +1,188 @@
+{% extends 'base/base.html' %}
+
+{% block title %}프로필 수정 - 마음챙김 대화{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-transparent">
+                    <h4 class="mb-0">프로필 수정</h4>
+                </div>
+                <div class="card-body p-4">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <form method="post" action="{% url 'profile_edit' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <label class="form-label">프로필 이미지</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="d-flex align-items-center">
+                                    <div class="me-3">
+                                        {% if form.instance.profile_image %}
+                                            <img src="{{ form.instance.profile_image.url }}" class="rounded-circle" width="80" height="80" alt="프로필 이미지">
+                                        {% else %}
+                                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; font-size: 2rem;">
+                                                {{ user.username|slice:":1"|upper }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div>
+                                        <input type="file" name="profile_image" id="id_profile_image" class="form-control">
+                                        <div class="form-text">PNG, JPG 또는 GIF 형식만 가능합니다. 최대 5MB</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <label for="{{ form.first_name.id_for_label }}" class="form-label">이름</label>
+                            </div>
+                            <div class="col-md-9">
+                                <input type="text" name="{{ form.first_name.name }}" class="form-control {% if form.first_name.errors %}is-invalid{% endif %}" id="{{ form.first_name.id_for_label }}" value="{{ form.first_name.value|default:'' }}">
+                                {% if form.first_name.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.first_name.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <label for="{{ form.last_name.id_for_label }}" class="form-label">성</label>
+                            </div>
+                            <div class="col-md-9">
+                                <input type="text" name="{{ form.last_name.name }}" class="form-control {% if form.last_name.errors %}is-invalid{% endif %}" id="{{ form.last_name.id_for_label }}" value="{{ form.last_name.value|default:'' }}">
+                                {% if form.last_name.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.last_name.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <label for="{{ form.email.id_for_label }}" class="form-label">이메일</label>
+                            </div>
+                            <div class="col-md-9">
+                                <input type="email" name="{{ form.email.name }}" class="form-control {% if form.email.errors %}is-invalid{% endif %}" id="{{ form.email.id_for_label }}" value="{{ form.email.value|default:'' }}">
+                                {% if form.email.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.email.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">이메일을 변경하면 확인 메일이 발송되며, 확인 후 변경됩니다.</div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <label for="{{ form.phone_number.id_for_label }}" class="form-label">연락처</label>
+                            </div>
+                            <div class="col-md-9">
+                                <input type="tel" name="{{ form.phone_number.name }}" class="form-control {% if form.phone_number.errors %}is-invalid{% endif %}" id="{{ form.phone_number.id_for_label }}" value="{{ form.phone_number.value|default:'' }}">
+                                {% if form.phone_number.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.phone_number.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <label for="{{ form.birth_date.id_for_label }}" class="form-label">생년월일</label>
+                            </div>
+                            <div class="col-md-9">
+                                <input type="date" name="{{ form.birth_date.name }}" class="form-control {% if form.birth_date.errors %}is-invalid{% endif %}" id="{{ form.birth_date.id_for_label }}" value="{{ form.birth_date.value|date:'Y-m-d'|default:'' }}">
+                                {% if form.birth_date.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.birth_date.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <h5 class="mb-3 mt-5">알림 설정</h5>
+
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <label class="form-label">이메일 알림</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-check">
+                                    <input type="checkbox" name="{{ form.email_notifications.name }}" class="form-check-input" id="{{ form.email_notifications.id_for_label }}" {% if form.email_notifications.value %}checked{% endif %}>
+                                    <label class="form-check-label" for="{{ form.email_notifications.id_for_label }}">
+                                        위로 메일과 알림을 이메일로 받기
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <label class="form-label">일일 체크인</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-check">
+                                    <input type="checkbox" name="{{ form.daily_check_in_reminder.name }}" class="form-check-input" id="{{ form.daily_check_in_reminder.id_for_label }}" {% if form.daily_check_in_reminder.value %}checked{% endif %}>
+                                    <label class="form-check-label" for="{{ form.daily_check_in_reminder.id_for_label }}">
+                                        매일 감정 상태 체크인 알림 받기
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <label class="form-label">주간 요약</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-check">
+                                    <input type="checkbox" name="{{ form.weekly_summary_enabled.name }}" class="form-check-input" id="{{ form.weekly_summary_enabled.id_for_label }}" {% if form.weekly_summary_enabled.value %}checked{% endif %}>
+                                    <label class="form-check-label" for="{{ form.weekly_summary_enabled.id_for_label }}">
+                                        주간 감정 상태 요약 보고서 받기
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-5">
+                            <a href="{% url 'profile' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-1"></i> 취소
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i> 변경사항 저장
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

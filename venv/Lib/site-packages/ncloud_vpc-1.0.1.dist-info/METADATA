@@ -1,0 +1,18 @@
+Metadata-Version: 2.1
+Name: ncloud-vpc
+Version: 1.0.1
+Summary: vpc
+Home-page: UNKNOWN
+Author: UNKNOWN
+Author-email: UNKNOWN
+License: UNKNOWN
+Keywords: vpc
+Platform: UNKNOWN
+Requires-Dist: urllib3 (>=1.15)
+Requires-Dist: six (>=1.10)
+Requires-Dist: certifi
+Requires-Dist: python-dateutil
+
+UNKNOWN
+
+

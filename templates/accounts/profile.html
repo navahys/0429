@@ -1,0 +1,392 @@
+{% extends 'base/base.html' %}
+
+{% block title %}내 프로필 - 마음챙김 대화{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <!-- 프로필 정보 카드 -->
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center p-4">
+                    {% if user_profile.profile_image %}
+                        <img src="{{ user_profile.profile_image.url }}" class="rounded-circle mb-3" width="120" height="120" alt="{{ user_profile.username }}">
+                    {% else %}
+                        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 120px; height: 120px; font-size: 3rem;">
+                            {{ user_profile.username|slice:":1"|upper }}
+                        </div>
+                    {% endif %}
+                    
+                    <h3 class="mb-0">{{ user_profile.get_full_name|default:user_profile.username }}</h3>
+                    <p class="text-muted">{{ user_profile.email }}</p>
+                    
+                    <div class="d-grid gap-2 mt-4">
+                        <a href="{% url 'profile_edit' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-edit me-1"></i> 프로필 수정
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 설정 카드 -->
+            <div class="card shadow-sm mt-4">
+                <div class="card-header bg-transparent">
+                    <h5 class="mb-0">설정</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            <span>
+                                <i class="fas fa-envelope me-2 text-primary"></i> 이메일 알림
+                            </span>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="emailNotifications" {% if user_profile.email_notifications %}checked{% endif %} data-setting="email_notifications">
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            <span>
+                                <i class="fas fa-calendar-check me-2 text-primary"></i> 일일 체크인 알림
+                            </span>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="dailyCheckIn" {% if user_profile.daily_check_in_reminder %}checked{% endif %} data-setting="daily_check_in_reminder">
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            <span>
+                                <i class="fas fa-chart-line me-2 text-primary"></i> 주간 요약 발송
+                            </span>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="weeklySummary" {% if user_profile.weekly_summary_enabled %}checked{% endif %} data-setting="weekly_summary_enabled">
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 계정 정보 탭 -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-transparent">
+                    <ul class="nav nav-tabs card-header-tabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="account-tab" data-bs-toggle="tab" data-bs-target="#account" type="button" role="tab" aria-controls="account" aria-selected="true">
+                                계정 정보
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="security-tab" data-bs-toggle="tab" data-bs-target="#security" type="button" role="tab" aria-controls="security" aria-selected="false">
+                                보안
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="voice-tab" data-bs-toggle="tab" data-bs-target="#voice" type="button" role="tab" aria-controls="voice" aria-selected="false">
+                                음성 설정
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body p-4">
+                    <div class="tab-content">
+                        <!-- 계정 정보 탭 내용 -->
+                        <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
+                            <h5 class="mb-4">기본 정보</h5>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-4">
+                                    <p class="mb-0 text-muted">사용자 이름</p>
+                                </div>
+                                <div class="col-md-8">
+                                    <p class="mb-0">{{ user_profile.username }}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-4">
+                                    <p class="mb-0 text-muted">이메일</p>
+                                </div>
+                                <div class="col-md-8">
+                                    <p class="mb-0">{{ user_profile.email }}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-4">
+                                    <p class="mb-0 text-muted">이름</p>
+                                </div>
+                                <div class="col-md-8">
+                                    <p class="mb-0">{{ user_profile.get_full_name|default:"-" }}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-4">
+                                    <p class="mb-0 text-muted">연락처</p>
+                                </div>
+                                <div class="col-md-8">
+                                    <p class="mb-0">{{ user_profile.phone_number|default:"-" }}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-4">
+                                    <p class="mb-0 text-muted">생년월일</p>
+                                </div>
+                                <div class="col-md-8">
+                                    <p class="mb-0">{{ user_profile.birth_date|date:"Y년 m월 d일"|default:"-" }}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-4">
+                                    <p class="mb-0 text-muted">가입일</p>
+                                </div>
+                                <div class="col-md-8">
+                                    <p class="mb-0">{{ user_profile.date_joined|date:"Y년 m월 d일" }}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-2 mt-4">
+                                <a href="{% url 'profile_edit' %}" class="btn btn-primary">
+                                    <i class="fas fa-user-edit me-1"></i> 정보 수정하기
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- 보안 탭 내용 -->
+                        <div class="tab-pane fade" id="security" role="tabpanel" aria-labelledby="security-tab">
+                            <h5 class="mb-4">보안 설정</h5>
+                            
+                            <div class="mb-4">
+                                <h6 class="mb-3">비밀번호 변경</h6>
+                                <p class="text-muted mb-3">주기적으로 비밀번호를 변경하여 계정을 안전하게 보호하세요.</p>
+                                <a href="{% url 'password_change' %}" class="btn btn-outline-primary">
+                                    <i class="fas fa-key me-1"></i> 비밀번호 변경
+                                </a>
+                            </div>
+                            
+                            <hr class="my-4">
+                            
+                            <div class="mb-4">
+                                <h6 class="mb-3">로그인 기록</h6>
+                                <p class="text-muted mb-3">최근 로그인 기록을 확인하여 계정의 보안 상태를 점검하세요.</p>
+                                
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>날짜</th>
+                                                <th>IP 주소</th>
+                                                <th>기기</th>
+                                                <th>상태</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- TODO: 실제 로그인 기록 데이터 연동 -->
+                                            <tr>
+                                                <td>{{ user_profile.last_login|date:"Y-m-d H:i" }}</td>
+                                                <td>127.0.0.1</td>
+                                                <td>Chrome (Windows)</td>
+                                                <td><span class="badge bg-success">성공</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <hr class="my-4">
+                            
+                            <div class="mb-4">
+                                <h6 class="mb-3">계정 삭제</h6>
+                                <p class="text-muted mb-3">계정을 삭제하면 모든 데이터가 영구적으로 제거됩니다. 이 작업은 되돌릴 수 없습니다.</p>
+                                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
+                                    <i class="fas fa-user-times me-1"></i> 계정 삭제
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- 음성 설정 탭 내용 -->
+                        <div class="tab-pane fade" id="voice" role="tabpanel" aria-labelledby="voice-tab">
+                            <h5 class="mb-4">음성 설정</h5>
+                            
+                            <div class="mb-4">
+                                <h6 class="mb-3">기본 음성 선택</h6>
+                                <p class="text-muted mb-3">AI 응답을 재생할 때 사용할 기본 음성을 선택하세요.</p>
+                                
+                                <div class="row g-3">
+                                    {% for voice in voice_profiles %}
+                                    <div class="col-md-6">
+                                        <div class="card voice-profile-card {% if user_profile.preferred_voice == voice.voice_id %}selected{% endif %}" data-voice-id="{{ voice.voice_id }}">
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="voice-icon bg-light rounded-circle p-3 me-3">
+                                                        <i class="fas fa-microphone text-primary"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="mb-0">{{ voice.name }}</h6>
+                                                        <small class="voice-category">{{ voice.get_category_display }}</small>
+                                                    </div>
+                                                    <div class="ms-auto">
+                                                        <button class="btn btn-sm btn-outline-primary play-sample" data-sample="{{ voice.sample_audio.url }}">
+                                                            <i class="fas fa-play"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% empty %}
+                                    <div class="col-12">
+                                        <div class="alert alert-info">사용 가능한 음성 프로필이 없습니다.</div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                
+                                <form id="voiceSettingForm" method="post" action="{% url 'update_voice_setting' %}" class="mt-4">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="preferred_voice" id="preferredVoice" value="{{ user_profile.preferred_voice }}">
+                                    <div class="d-grid gap-2">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-save me-1"></i> 음성 설정 저장
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 계정 삭제 모달 -->
+<div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteAccountModalLabel">계정 삭제 확인</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>주의:</strong> 계정 삭제는 되돌릴 수 없습니다.
+                </div>
+                <p>계정을 삭제하면 다음 정보가 모두 영구적으로 제거됩니다:</p>
+                <ul>
+                    <li>개인 프로필 및 계정 정보</li>
+                    <li>모든 대화 내역</li>
+                    <li>모든 감정 상태 기록</li>
+                </ul>
+                <p>정말로 계정을 삭제하시겠습니까?</p>
+                
+                <form id="deleteAccountForm" method="post" action="{% url 'delete_account' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="confirmPassword" class="form-label">비밀번호 확인</label>
+                        <input type="password" name="password" class="form-control" id="confirmPassword" required>
+                        <div class="form-text">계정 삭제를 확인하려면 비밀번호를 입력하세요.</div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                <button type="button" class="btn btn-danger" onclick="document.getElementById('deleteAccountForm').submit();">
+                    계정 삭제
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // 설정 토글 처리
+    document.querySelectorAll('.form-check-input[data-setting]').forEach(toggle => {
+        toggle.addEventListener('change', function() {
+            const setting = this.dataset.setting;
+            const value = this.checked;
+            
+            // AJAX로 설정 업데이트
+            fetch('/api/users/update_preferences/', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: JSON.stringify({
+                    [setting]: value
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('설정 업데이트에 실패했습니다.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                showAlert('설정이 업데이트되었습니다.', 'success');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showAlert(error.message, 'danger');
+                this.checked = !value; // 실패 시 토글 상태 되돌리기
+            });
+        });
+    });
+    
+    // 음성 프로필 선택
+    document.querySelectorAll('.voice-profile-card').forEach(card => {
+        card.addEventListener('click', function() {
+            // 모든 카드에서 선택 클래스 제거
+            document.querySelectorAll('.voice-profile-card').forEach(c => c.classList.remove('selected'));
+            
+            // 클릭한 카드에 선택 클래스 추가
+            this.classList.add('selected');
+            
+            // 선택한 음성 ID를 hidden input에 설정
+            document.getElementById('preferredVoice').value = this.dataset.voiceId;
+        });
+    });
+    
+    // 음성 샘플 재생
+    document.querySelectorAll('.play-sample').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.stopPropagation(); // 카드 클릭 이벤트 전파 중지
+            
+            const sampleUrl = this.dataset.sample;
+            if (sampleUrl) {
+                const audio = new Audio(sampleUrl);
+                audio.play();
+            }
+        });
+    });
+    
+    // 알림 표시 함수
+    function showAlert(message, type = 'info') {
+        const alertsContainer = document.querySelector('.alerts-container') || document.createElement('div');
+        
+        if (!document.querySelector('.alerts-container')) {
+            alertsContainer.classList.add('alerts-container', 'position-fixed', 'top-0', 'end-0', 'p-3');
+            document.body.appendChild(alertsContainer);
+        }
+        
+        const alertDiv = document.createElement('div');
+        alertDiv.classList.add('alert', `alert-${type}`, 'alert-dismissible', 'fade', 'show');
+        alertDiv.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        `;
+        
+        alertsContainer.appendChild(alertDiv);
+        
+        // 5초 후 자동으로 닫기
+        setTimeout(() => {
+            const bsAlert = new bootstrap.Alert(alertDiv);
+            bsAlert.close();
+        }, 5000);
+    }
+</script>
+{% endblock %}

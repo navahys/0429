@@ -1,0 +1,97 @@
+{% extends 'base/base.html' %}
+
+{% block title %}회원가입 - 마음챙김 대화{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-body p-5">
+                    <h2 class="text-center mb-4">회원가입</h2>
+                    
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <form method="post" action="{% url 'register' %}">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="id_email" class="form-label">이메일</label>
+                            <input type="email" name="email" class="form-control" id="id_email" required>
+                            <small class="form-text text-muted">위로 메일을 받을 이메일 주소를 입력하세요.</small>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="id_first_name" class="form-label">이름</label>
+                                <input type="text" name="first_name" class="form-control" id="id_first_name">
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="id_last_name" class="form-label">성</label>
+                                <input type="text" name="last_name" class="form-control" id="id_last_name">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_username" class="form-label">사용자 이름</label>
+                            <input type="text" name="username" class="form-control" id="id_username" required>
+                            <small class="form-text text-muted">영문, 숫자, @, ., +, -, _ 만 사용 가능합니다.</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_password1" class="form-label">비밀번호</label>
+                            <input type="password" name="password1" class="form-control" id="id_password1" required>
+                            <small class="form-text text-muted">
+                                <ul>
+                                    <li>최소 8자 이상이어야 합니다.</li>
+                                    <li>숫자와 영문자를 포함해야 합니다.</li>
+                                    <li>일반적인 비밀번호는 사용할 수 없습니다.</li>
+                                    <li>개인정보와 비슷한 비밀번호는 사용할 수 없습니다.</li>
+                                </ul>
+                            </small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_password2" class="form-label">비밀번호 확인</label>
+                            <input type="password" name="password2" class="form-control" id="id_password2" required>
+                            <small class="form-text text-muted">확인을 위해 이전과 동일한 비밀번호를 입력하세요.</small>
+                        </div>
+                        
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" name="email_notifications" class="form-check-input" id="id_email_notifications" checked>
+                            <label class="form-check-label" for="id_email_notifications">이메일 알림 수신 동의</label>
+                            <small class="form-text text-muted d-block">위로 메일과 주간 요약을 이메일로 받습니다.</small>
+                        </div>
+                        
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" name="terms" class="form-check-input" id="id_terms" required>
+                            <label class="form-check-label" for="id_terms">
+                                <a href="{% url 'terms' %}" target="_blank">이용약관</a>과 
+                                <a href="{% url 'privacy' %}" target="_blank">개인정보 처리방침</a>에 동의합니다.
+                            </label>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">회원가입</button>
+                        </div>
+                    </form>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="text-center">
+                        <p>이미 계정이 있으신가요? <a href="{% url 'login' %}" class="fw-bold">로그인</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

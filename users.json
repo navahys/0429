@@ -1,0 +1,48 @@
+{
+    "users": [
+        {
+            "id": "ad180009-7cbf-43ed-a86d-783bf26022aa",
+            "username": "test",
+            "email": "kedicod836@mongrec.com",
+            "password_hash": "825ae7130493aa32e5cc073267e0c695769542b4571752bf92683633975a3964",
+            "password_salt": "3bd78ccd9ba44218baba4b481e47b94d",
+            "first_name": "test",
+            "last_name": "test",
+            "is_active": false,
+            "is_staff": false,
+            "is_superuser": false,
+            "date_joined": "2025-04-29T15:51:34.582156",
+            "last_login": "2025-04-29T16:19:22.364259",
+            "preferences": {
+                "email_notifications": true,
+                "daily_check_in_reminder": false,
+                "weekly_summary_enabled": true,
+                "preferred_voice": "default"
+            },
+            "verification_token": "f40cc1404516433dbb50c3978aea2d32",
+            "token_created_at": "2025-04-29T15:51:34.592196"
+        },
+        {
+            "id": "02946c5e-1645-427f-bda3-34e00398e9a7",
+            "username": "kkkk",
+            "email": "navahys@naver.com",
+            "password_hash": "0a43eb84016c4f6ee0a20764d2dd19f12cbcdcf17d30b5a92e07f3878691820f",
+            "password_salt": "fc666700d06c4d899f9f26c89e4127e2",
+            "first_name": "kk",
+            "last_name": "kkk",
+            "is_active": false,
+            "is_staff": false,
+            "is_superuser": false,
+            "date_joined": "2025-04-29T16:20:02.194890",
+            "last_login": "2025-04-29T16:20:58.520816",
+            "preferences": {
+                "email_notifications": true,
+                "daily_check_in_reminder": false,
+                "weekly_summary_enabled": true,
+                "preferred_voice": "default"
+            },
+            "verification_token": "bbe3891cdc4149249584cf1b76399e3c",
+            "token_created_at": "2025-04-29T16:20:02.206401"
+        }
+    ]
+}

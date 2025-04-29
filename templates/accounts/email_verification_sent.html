@@ -1,0 +1,38 @@
+{% extends 'base/base.html' %}
+
+{% block title %}이메일 인증 - 마음챙김 대화{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-body p-5 text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-envelope text-primary" style="font-size: 4rem;"></i>
+                    </div>
+                    
+                    <h2 class="mb-4">이메일 인증 안내</h2>
+                    
+                    <p class="mb-4">
+                        <strong>{{ email }}</strong>으로 인증 이메일을 발송했습니다.<br>
+                        이메일에 포함된 링크를 클릭하여 계정 인증을 완료해 주세요.
+                    </p>
+                    
+                    <div class="alert alert-info" role="alert">
+                        <i class="fas fa-info-circle me-2"></i>
+                        이메일이 보이지 않으면 스팸 폴더를 확인해 주세요.
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="text-center">
+                        <p>다른 이메일로 가입하시겠습니까?</p>
+                        <a href="{% url 'register' %}" class="btn btn-outline-primary">다시 가입하기</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
